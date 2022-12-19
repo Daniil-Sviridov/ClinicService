@@ -3,6 +3,8 @@ syntax = "proto3";
 option csharp_namespace = "ClinicServiceNamespace";
 
 // https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/wrappers.proto
+//
+//
 
 import "google/protobuf/wrappers.proto";
 
