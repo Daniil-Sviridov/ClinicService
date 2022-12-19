@@ -9,6 +9,8 @@ namespace ClinicService
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddGrpc();
+
             builder.Services.AddDbContext<ClinicServiceDbContext>(options =>
             {
                 options.UseSqlite(builder.Configuration["Settings:DatabaseOptions:ConnectionString"]);
@@ -31,8 +33,12 @@ namespace ClinicService
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            app.UseEndpoints(point => 
+               { 
+                   point.MapGrpcService<ClinicService.Services.Impl.ClinicService>(); 
+               }); 
 
             app.Run();
         }
