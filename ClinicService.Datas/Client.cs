@@ -30,7 +30,5 @@ namespace ClinicService.Data
 
         [InverseProperty(nameof(Consultation.Client))]
         public ICollection<Consultation> Consultations { get; set; } = new HashSet<Consultation>();
-
-
     }
 }
