@@ -1,3 +1,6 @@
+using ClinicService.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace ClinicService
 {
     public class Program
@@ -6,7 +9,11 @@ namespace ClinicService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddDbContext<ClinicServiceDbContext>(options =>
+            {
+                options.UseSqlite(builder.Configuration["Settings:DatabaseOptions:ConnectionString"]);
+                SQLitePCL.Batteries.Init();
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
