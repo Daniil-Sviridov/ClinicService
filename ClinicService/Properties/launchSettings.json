@@ -1,5 +1,21 @@
 ﻿{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "ClinicService-Http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5001",
+      "environmentVariables": { "ASPNETCORE_ENVIRONMENT": "Development" }
+    },
+    "ClinicService-gRpc": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5002",
+      "environmentVariables": { "ASPNETCORE_ENVIRONMENT": "Development" }
+    }
+    /*"$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -27,5 +43,5 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
+  }*/
   }
-}

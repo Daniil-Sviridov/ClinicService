@@ -8,9 +8,12 @@ namespace ClinicService.Services.Impl
     public class ClinicService : ClinicServiceBase
     {
         private readonly ClinicServiceDbContext _dbContext;
-        public ClinicService(ClinicServiceDbContext dbContext)
+        private readonly ILogger<ClinicService> _logger;
+
+        public ClinicService(ClinicServiceDbContext dbContext, ILogger<ClinicService> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public override Task<CreateClientResponse> CreateClinet(CreateClientRequest request, ServerCallContext context)

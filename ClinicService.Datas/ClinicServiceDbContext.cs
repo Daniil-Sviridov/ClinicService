@@ -8,6 +8,9 @@ namespace ClinicService.Data
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Consultation> Consultations { get; set; }
 
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<AccountSession> AccountSessions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
