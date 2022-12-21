@@ -15,6 +15,7 @@
       "applicationUrl": "http://localhost:5002",
       "environmentVariables": { "ASPNETCORE_ENVIRONMENT": "Development" }
     }
+  }
     /*"$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,

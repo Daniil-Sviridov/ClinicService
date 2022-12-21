@@ -1,19 +1,55 @@
 ﻿
+using ClinicService.Proto;
 using ClinicServiceNamespace;
+using Grpc.Core;
 using Grpc.Net.Client;
+using static ClinicService.Proto.AuthenticateService;
 using static ClinicServiceNamespace.ClinicService;
 
-AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+//AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
-using var channel = GrpcChannel.ForAddress("http://localhost:5001");
-ClinicServiceClient clinicServiceClient = new ClinicServiceClient(channel);
+//using var channel = GrpcChannel.ForAddress("http://localhost:5001");
+
+using var channel = GrpcChannel.ForAddress("https://localhost:5002");
+
+//ClinicServiceClient clinicServiceClient = new ClinicServiceClient(channel);
+
+AuthenticateServiceClient authenticateServiceClient = new AuthenticateServiceClient(channel);
+var authenticationResponse = authenticateServiceClient.Login(new AuthenticationRequest
+{
+    UserName = "daniil@gmail.com",
+    Password = "12345"
+});
+
+if (authenticationResponse.Status != 0)
+{
+    Console.WriteLine("Authentication error.");
+    Console.ReadKey();
+    return;
+}
+
+Console.WriteLine($"Session token: {authenticationResponse.SessionContext.SessionToken}");
+
+var callCredentials = CallCredentials.FromInterceptor((c, m) =>
+{
+    m.Add("Authorization",
+        $"Bearer {authenticationResponse.SessionContext.SessionToken}");
+    return Task.CompletedTask;
+});
+
+var protectedChannel = GrpcChannel.ForAddress("https://localhost:5002", new GrpcChannelOptions
+{
+    Credentials = ChannelCredentials.Create(new SslCredentials(), callCredentials)
+});
+
+ClinicServiceClient clinicServiceClient = new ClinicServiceClient(protectedChannel);
 
 var createClientResponse = clinicServiceClient.CreateClinet(new CreateClientRequest
 {
-    Document = "Паспорт",
-    FirstName = "Имя",
-    Patronymic = "Отчество",
-    Surname = "Фамилия"
+    Document = "Паспорт 1",
+    FirstName = "Имя 3",
+    Patronymic = "Отчество 2",
+    Surname = "Фамилия 1"
 });
 
 if (createClientResponse.ErrCode == 0)

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="..\ClinicService\Proto\auth.proto" GrpcServices="Client">
+      <Link>Proto\auth.proto</Link>
+    </Protobuf>
     <Protobuf Include="..\ClinicService\Proto\clinic.proto" GrpcServices="Client">
       <Link>Proto\clinic.proto</Link>
     </Protobuf>

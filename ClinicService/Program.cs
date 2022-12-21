@@ -25,12 +25,13 @@ namespace ClinicService
                 options.Listen(IPAddress.Any, 5002, listenOptions =>
                 {
                     listenOptions.Protocols = HttpProtocols.Http2;
+                    listenOptions.UseHttps("C:\\My_Study_Csh\\Quarter4\\SOAP.REST.gRPC\\Lesson3\\ClinicService\\devrlopmentcert.pfx", "12345");
                 });
 
                 options.Listen(IPAddress.Any, 5001, listenOptions =>
-{
-    listenOptions.Protocols = HttpProtocols.Http1;
-});
+                {
+                    listenOptions.Protocols = HttpProtocols.Http1;
+                });
 
             });
 
@@ -158,6 +159,7 @@ namespace ClinicService
             app.UseEndpoints(point =>
                {
                    point.MapGrpcService<Services.Impl.ClinicService>();
+                   point.MapGrpcService<Services.Impl.AuthService>();
                });
 
             app.Run();
