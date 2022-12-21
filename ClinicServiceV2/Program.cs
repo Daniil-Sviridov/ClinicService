@@ -1,6 +1,7 @@
 using ClinicService.Data;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Net;
 
 internal class Program
@@ -25,6 +26,15 @@ internal class Program
 
         builder.Services.AddGrpc().AddJsonTranscoding();
 
+        builder.Services.AddGrpcSwagger();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clinic Srvise v2", Version = "1" });
+            var filePath = Path.Combine(System.AppContext.BaseDirectory, "ClinicServiceV2.xml");
+            c.IncludeXmlComments(filePath);
+            c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
+        });
+
         builder.Services.AddDbContext<ClinicServiceDbContext>(options =>
         {
             options.UseSqlite(builder.Configuration["Settings:DatabaseOptions:ConnectionString"]);
@@ -34,6 +44,13 @@ internal class Program
         builder.Services.AddAuthorization();
 
         var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
 
         app.UseAuthorization();
