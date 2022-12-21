@@ -1,0 +1,101 @@
+//syntax = "proto3";
+
+//option csharp_namespace = "ClinicServiceV2.Protos";
+
+syntax = "proto3";
+
+option csharp_namespace = "ClinicServiceV2"; //ClinicServiceNamespace
+
+// https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/wrappers.proto
+//
+//
+
+import "google/protobuf/wrappers.proto";
+import "google/api/annotations.proto";
+
+package  proto;
+
+service ClinicService{
+    //Create client
+	rpc CreateClinet (CreateClientRequest) returns (CreateClientResponse);
+    //Update client
+	rpc UpdateClient (UpdateClientRequest) returns (UpdateClientResponse);
+    //Delete client
+	rpc DeleteClient (DeleteClientRequest) returns (DeleteClientResponse);
+
+    //Get client by Id
+	rpc GetClientById (GetClientByIdRequest) returns (ClientResponse);
+
+    //Get all clients
+	rpc GetClients (GetClientsRequest) returns (GetClientsResponse)
+   {
+        option (google.api.http) =  {
+            get: "/api/clients"
+        };
+    }
+}
+
+//Request create clien
+message CreateClientRequest {
+        string document = 1;
+        string surname = 2;
+        string firstName = 3;
+        string patronymic = 4;
+}
+
+message CreateClientResponse {
+		google.protobuf.Int32Value clientId = 1;
+        int32 errCode = 2;
+        string errMessage =3;
+}
+
+message UpdateClientRequest {
+        int32 clientId = 1;
+        string document = 2;
+        string surname = 3;
+        string firstName = 4;
+        string patronymic = 5;
+}
+
+message UpdateClientResponse {
+		int32 errCode = 1;
+        string errMessage = 2;
+}
+
+message DeleteClientRequest {
+        int32 clientId = 1;
+}
+
+message DeleteClientResponse {
+		int32 errCode = 1;
+        string errMessage = 2;
+}
+
+message GetClientByIdRequest {
+        int32 clientId = 1;
+}
+
+message GetClientByIdResponse {
+        ClientResponse client = 1;
+        int32 errCode = 2;
+        string errMessage =3;
+}
+
+message ClientResponse {
+		int32 clientId = 1;
+        string document = 2;
+        string surname = 3;
+        string firstName = 4;
+        string patronymic = 5;
+}
+
+message GetClientsRequest{
+
+}
+
+message GetClientsResponse{
+    repeated ClientResponse clients = 1;
+    int32 errCode = 2;
+    string errMessage =3;
+}
+
