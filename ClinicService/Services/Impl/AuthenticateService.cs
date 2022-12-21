@@ -3,6 +3,8 @@ using ClinicService.Models;
 using ClinicService.Models.Requests;
 using ClinicService.Utils;
 using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -30,7 +32,33 @@ namespace ClinicService.Services.Impl
 
         public SessionContext GetSessionInfo(string sessionToken)
         {
-            throw new NotImplementedException();
+            SessionContext sessionContext;
+
+            lock (_sessions) 
+            {
+                _sessions.TryGetValue(sessionToken, out sessionContext);
+            };
+
+            if (sessionContext == null) 
+            {
+                using IServiceScope scope = _serviceScopeFactory.CreateScope();
+                ClinicServiceDbContext context = scope.ServiceProvider.GetRequiredService<ClinicServiceDbContext>();
+
+                AccountSession session = context.AccountSessions.FirstOrDefault(item => item.SessionToken == sessionToken);
+
+                if (session == null) return null;
+
+                Account account = context.Accounts.FirstOrDefault(item => item.AccountId == session.AccountId);
+
+                sessionContext = GetSessionContext(account, session);
+
+                lock (_sessions) 
+                {
+                    _sessions[sessionContext.SessionToken] = sessionContext;
+                }
+            }
+
+            return sessionContext;
         }
 
         public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
