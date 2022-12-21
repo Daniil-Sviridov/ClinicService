@@ -84,7 +84,7 @@ namespace ClinicService
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticateService.SecretKey)),
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        ValidIssuer = builder.Configuration["Settings:Security:Issuer"],,
+                        ValidIssuer = builder.Configuration["Settings:Security:Issuer"],
                         ValidAudience = builder.Configuration["Settings:Security:Audience"],
                         ClockSkew = TimeSpan.Zero
                     };

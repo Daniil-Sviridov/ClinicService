@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Proto\auth.proto" />
     <None Remove="Proto\clinic.proto" />
   </ItemGroup>
 
@@ -31,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Proto\auth.proto" GrpcServices="Server" />
     <Protobuf Include="Proto\clinic.proto" GrpcServices="Server" />
   </ItemGroup>
 
